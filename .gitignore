@@ -1,0 +1,21 @@
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+*.iml
+*.log
+
+# Backend (Java / Maven)
+backend/target/
+
+# Flutter / Dart build artifacts (the mobile/ project has its own .gitignore too)
+mobile/build/
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+
+# Docker volumes
+**/mongo-data/
+
+# Claude Code local settings
+.claude/

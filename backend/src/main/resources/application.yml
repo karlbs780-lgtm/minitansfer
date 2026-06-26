@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: minitransfer
+  data:
+    mongodb:
+      # Overridable via env var (used by docker-compose to point at the "mongodb" service).
+      uri: ${MONGODB_URI:mongodb://localhost:27017/minitransfer}
+      auto-index-creation: true
+
+app:
+  jwt:
+    # IMPORTANT: override JWT_SECRET in production. Must be >= 32 bytes for HS256.
+    secret: ${JWT_SECRET:dev-secret-please-change-me-0123456789-abcdefghijklmnopqrstuvwxyz}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}   # 24h
+  wallet:
+    # Demo balance credited to every new account, in FCFA (integer, no decimals).
+    initial-balance: ${INITIAL_BALANCE:10000}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: INFO

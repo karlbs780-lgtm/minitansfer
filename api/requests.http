@@ -1,0 +1,100 @@
+### MiniTransfer API - fichier de test HTTP
+### Compatible avec l'extension "REST Client" (VS Code) ou le client HTTP d'IntelliJ.
+### Astuce : executez "Register" ou "Login", copiez le "token" renvoye dans la variable @token ci-dessous.
+
+@baseUrl = http://localhost:8080
+@token = COLLER_LE_TOKEN_ICI
+
+### 1. Inscription (cree un compte + portefeuille a 10 000 FCFA)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Alice Dupont",
+  "email": "alice@example.com",
+  "phone": "+237600000001",
+  "password": "secret123"
+}
+
+### 1bis. Inscription d'un second utilisateur (destinataire)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Bob Martin",
+  "email": "bob@example.com",
+  "phone": "+237600000002",
+  "password": "secret123"
+}
+
+### 2. Connexion (retourne un token JWT)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "secret123"
+}
+
+### 3. Consulter le solde du portefeuille (authentifie)
+GET {{baseUrl}}/api/wallet/balance
+Authorization: Bearer {{token}}
+
+### 4. Effectuer un transfert vers Bob
+POST {{baseUrl}}/api/transfers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "recipient": "bob@example.com",
+  "amount": 2500
+}
+
+### 5. Consulter l'historique des transactions
+GET {{baseUrl}}/api/transfers/history
+Authorization: Bearer {{token}}
+
+### --- Cas d'erreur ---
+
+### Montant superieur au solde -> 400 INSUFFICIENT_BALANCE
+POST {{baseUrl}}/api/transfers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "recipient": "bob@example.com",
+  "amount": 999999999
+}
+
+### Transfert vers soi-meme -> 400 SELF_TRANSFER
+POST {{baseUrl}}/api/transfers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "recipient": "alice@example.com",
+  "amount": 1000
+}
+
+### Destinataire inexistant -> 404 RECIPIENT_NOT_FOUND
+POST {{baseUrl}}/api/transfers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "recipient": "ghost@example.com",
+  "amount": 1000
+}
+
+### Montant negatif -> 400 VALIDATION_ERROR
+POST {{baseUrl}}/api/transfers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "recipient": "bob@example.com",
+  "amount": -50
+}
+
+### Sans token -> 401 UNAUTHENTICATED
+GET {{baseUrl}}/api/wallet/balance
