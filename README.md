@@ -377,5 +377,5 @@ Par honnêteté (et faute de temps sur un périmètre volontairement maîtrisé)
 
 ## Temps passé
 
-≈ **1 journée de travail** (environ 7–8 heures) : conception et API backend + tests, application
+≈ **4 journée de travail** (environ 7–8 heures) : conception et API backend + tests, application
 Flutter (5 écrans + état + couche réseau), conteneurisation Docker et rédaction de la documentation.
